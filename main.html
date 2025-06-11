@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Mirror Library | Virtual Makeup Try-On</title>
+    <script type="module" src="main.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            width: 100%;
+            padding: 20px;
+            background-color: #343a40;
+            color: #ffffff;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+            font-weight: 500;
+        }
+        header p {
+            margin: 5px 0 0;
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+        }
+        .column {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            flex: 1;
+            min-width: 250px;
+        }
+        #effectsColumn, #settingsColumn {
+            max-width: 300px;
+        }
+        #modeColumn {
+            flex: 2;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        label {
+            font-size: 1.1em;
+            color: #212529;
+        }
+        input[type="radio"], select {
+            margin-right: 10px;
+        }
+        #app {
+            margin-top: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        img {
+            width: 100%;
+            max-width: 700px;
+            height: auto;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+        }
+        video {
+            display: none;
+            width: 100%;
+            max-width: 700px;
+            height: auto;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+        }
+        #mirrorCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Virtual Mirror: Discover Visual E-commerce</h1>
+    <p>Bring an interactive shopping experience to your customers and set your brand apart.</p>
+</header>
+
+<div class="container">
+    <div class="column" id="effectsColumn">
+        <h2>Lips:</h2>
+        <input type="radio" id="lipGloss" name="effect" value="LipGloss" valueType="color">
+        <label for="lipGloss">Lip Gloss</label><br>
+
+        <input type="radio" id="lipLiner" name="effect" value="LipLiner" valueType="color">
+        <label for="lipLiner">Lip Liner</label><br>
+
+        <input type="radio" id="lipstick" name="effect" value="Lipstick" valueType="color">
+        <label for="lipstick">Lipstick</label><br>
+
+        <input type="radio" id="lipstickShimmer" name="effect" value="LipstickShimmer" valueType="color">
+        <label for="lipstickShimmer">Lipstick Shimmer</label><br>
+
+        <input type="radio" id="matteLipstick" name="effect" value="MatteLipstick" valueType="color">
+        <label for="matteLipstick">Matte Lipstick</label><br>
+
+        <h2>Eyes:</h2>
+        <input type="radio" id="browsColor" name="effect" value="BrowsColor" valueType="color">
+        <label for="browsColor">Brows Color</label><br>
+
+        <input type="radio" id="eyeliner" name="effect" value="Eyeliner" valueType="color">
+        <label for="eyeliner">Eyeliner</label><br>
+
+        <input type="radio" id="mascara" name="effect" value="Mascara" valueType="color">
+        <label for="mascara">Mascara</label><br>
+
+        <input type="radio" id="kajal" name="effect" value="Kajal" valueType="color">
+        <label for="kajal">Kajal</label><br>
+
+        <input type="radio" id="eyeshadowsatin" name="effect" value="EyeShadowSatin+" valueType="color">
+        <label for="eyeshadowsatin">EyeShadow Satin</label><br>
+
+        <input type="radio" id="eyeshadowmatte" name="effect" value="EyeShadowMatte" valueType="color">
+        <label for="eyeshadowmatte">EyeShadow Matte</label><br>
+
+        <input type="radio" id="eyeshadowshimmer" name="effect" value="EyeShadowShimmer" valueType="color">
+        <label for="eyeshadowshimmer">EyeShadow Shimmer</label><br>
+
+        <h2>Face:</h2>
+        <input type="radio" id="foundationSatin" name="effect" value="FoundationSatin" valueType="color">
+        <label for="foundationSatin">Foundation Satin</label><br>
+
+        <input type="radio" id="foundationMatte" name="effect" value="FoundationMatte" valueType="color">
+        <label for="foundationMatte">Foundation Matte</label><br>
+
+        <input type="radio" id="concealer" name="effect" value="Concealer" valueType="color">
+        <label for="concealer">Concealer</label><br>
+
+        <input type="radio" id="contour" name="effect" value="Contour" valueType="color">
+        <label for="contour">Contour/Bronzer</label><br>
+
+        <h2>Accessories:</h2>
+        <input type="radio" id="eyeglasses" name="effect" value="Eyeglasses" valueType="image">
+        <label for="eyeglasses">Eyeglasses</label><br>
+    </div>
+
+    <div class="column" id="settingsColumn">
+        <div id="effectControls">
+            <div id="colorControl" style="display: none;">
+                <label for="colorPicker">Choose Color:</label><br>
+                <input type="color" id="colorPicker" name="colorPicker">
+            </div>
+
+            <div id="rangeTransparency" style="display: none;">
+                <label for="transparency">Transparency</label><br>
+                <input type="range" id="transparency" name="transparency">
+            </div>
+
+            <div id="rangeSaturation" style="display: none;">
+                <label for="saturation">Saturation</label><br>
+                <input type="range" id="saturation" name="saturation">
+            </div>
+        </div>
+    </div>
+
+    <div class="column" id="modeColumn">
+        <div>
+            <label for="modeSelect">Select Mode:</label>
+            <select id="modeSelect">
+                <option value="image" selected>ModeImage</option>
+                <option value="video">ModeVideo</option>
+            </select>
+        </div>
+
+        <div id="app">
+            <canvas id="mirrorCanvas" style="display:none"></canvas>
+            <video id="mirrorVideo" height="auto" playsinline="" autoplay="" muted="" width="700px" style="background: black"></video>
+            <img id="mirrorImg" src="face.png"/>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const constraints = {
+        video: true
+    };
+
+    let selectedEffectName = null;
+    let stream = null;
+    let video = null;
+
+    /**
+     * Set appropriate values from constants
+     */
+    function setRadioValues() {
+        document.getElementById("browsColor").value = window.EFFECT_BROWS_COLOR;
+        document.getElementById("lipstick").value = window.EFFECT_LIPSTICK;
+        document.getElementById("matteLipstick").value = window.EFFECT_MATTE_LIPSTICK;
+        document.getElementById("eyeliner").value = window.EFFECT_EYELINER;
+        document.getElementById("eyeglasses").value = window.EFFECT_EYEGLASSES;
+        document.getElementById("lipLiner").value = window.EFFECT_LIPLINER;
+        document.getElementById("lipGloss").value = window.EFFECT_LIP_GLOSS;
+        document.getElementById("lipstickShimmer").value = window.EFFECT_LIPSTICK_SHIMMER;
+        document.getElementById("kajal").value = window.EFFECT_KAJAL;
+        document.getElementById("mascara").value = window.EFFECT_MASCARA;
+        document.getElementById("foundationSatin").value = window.EFFECT_FOUNDATION_SATIN;
+        document.getElementById("foundationMatte").value = window.EFFECT_FOUNDATION_MATTE;
+        document.getElementById("contour").value = window.EFFECT_CONTOUR;
+        document.getElementById("eyeshadowsatin").value = window.EFFECT_EYESHADOW_SATIN;
+        document.getElementById("eyeshadowmatte").value = window.EFFECT_EYESHADOW_MATTE;
+        document.getElementById("eyeshadowshimmer").value = window.EFFECT_EYESHADOW_SHIMMER;
+    }
+
+    /**
+     * Init camera
+     * @returns {Promise<void>}
+     */
+    async function initNavigatorMedia() {
+        if (stream) {
+            return;
+        }
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+            video = document.getElementById("mirrorVideo");
+            video.srcObject = stream;
+            window.stream = stream;
+        } else {
+            throw new Error("getUserMedia() method is not supported by this browser");
+        }
+    }
+
+    /**
+     * Stop Camera
+     * @returns {Promise<void>}
+     */
+    async function stopVideo() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+    }
+
+    /**
+     * Show additional params for effect settings
+     * like range bars and so on
+     * @param effectName
+     * @param effectType
+     */
+    function showEffectControls(effectName, effectType) {
+        const colorControlDiv = document.getElementById("colorControl");
+        const transparencyControlDiv = document.getElementById("rangeTransparency");
+        const saturationControlDiv = document.getElementById("rangeSaturation");
+
+        const transparencyRange = document.getElementById("transparency");
+        const saturationRange = document.getElementById("saturation");
+
+        // Hide all controls initially
+        colorControlDiv.style.display = "none";
+        transparencyControlDiv.style.display = "none";
+        saturationControlDiv.style.display = "none";
+
+        if (effectType === 'color') {
+            document.getElementById("colorControl").style.display = "block";
+        } else {
+            document.getElementById("colorControl").style.display = "none";
+        }
+
+        switch (effectName) {
+            case window.EFFECT_LIP_GLOSS:
+                transparencyControlDiv.style.display = "block";
+                transparencyRange.min = 0.15;
+                transparencyRange.max = 0.7;
+                transparencyRange.step = 0.01;
+                transparencyRange.value = 0.15; // Set default value
+                break;
+
+            case window.EFFECT_LIPSTICK:
+                saturationControlDiv.style.display = "block";
+                saturationRange.min = 0;
+                saturationRange.max = 1;
+                saturationRange.step = 0.1;
+                saturationRange.value = 0; // Set default value
+
+                transparencyControlDiv.style.display = "block";
+                transparencyRange.min = 0.15;
+                transparencyRange.max = 0.3;
+                transparencyRange.step = 0.01;
+                transparencyRange.value = 0.15; // Set default value
+                break;
+
+            case window.EFFECT_LIPSTICK_SHIMMER:
+                transparencyControlDiv.style.display = "block";
+                transparencyRange.min = 0.15;
+                transparencyRange.max = 0.5;
+                transparencyRange.step = 0.01;
+                transparencyRange.value = 0.15; // Set default value
+                break;
+        }
+    }
+
+    /**
+     * Apply effect
+     * @returns {Promise<void>}
+     */
+    async function applyEffect() {
+
+        if (window.VirtualMirror) {
+            await window.VirtualMirror.terminate();
+        }
+
+        const effectRadio = document.querySelector('input[name="effect"]:checked');
+
+        if (!effectRadio) {
+            return;
+        }
+
+        const mode = document.getElementById("modeSelect").value;
+        const effectName = effectRadio.value;
+        const valueType = effectRadio.getAttribute('valueType');
+        const colorPicker = document.getElementById("colorPicker");
+        const mirrorCanvas = document.getElementById('mirrorCanvas');
+        const sourceImage = document.getElementById('mirrorImg');
+        const sourceVideo = document.getElementById('mirrorVideo');
+
+        if (mode === 'video') {
+            await initNavigatorMedia();
+            mirrorCanvas.style.display = 'block';
+            sourceVideo.style.display = 'block';
+            sourceImage.style.display = 'none';
+        } else {
+            await stopVideo();
+            mirrorCanvas.style.display = 'block';
+            sourceImage.style.display = 'block';
+            sourceVideo.style.display = 'none';
+        }
+
+        if (selectedEffectName !== effectName) {
+            selectedEffectName = effectName;
+            showEffectControls(effectName, valueType);
+        }
+
+        const effectObject = {
+            "effect": effectName,
+            "type": valueType
+        };
+
+
+        if (valueType === 'color') {
+            effectObject.value = colorPicker.value;
+        }
+
+        if (valueType === "image") {
+            effectObject.value = "https://your_domain.com/mirror/glasses.png"; //TODO
+        }
+
+        // Depending on the effect type, update value for range inputs
+        if (effectName === window.EFFECT_LIP_GLOSS || effectName === window.EFFECT_LIPSTICK_SHIMMER || effectName === window.EFFECT_LIPSTICK) {
+            effectObject.transparency = document.getElementById("transparency").value;
+        }
+        if (effectName === window.EFFECT_LIPLINER || effectName === window.EFFECT_LIPSTICK || effectName === window.EFFECT_HAIR_COLOR) {
+            effectObject.saturation = document.getElementById("saturation").value;
+        }
+
+        window.VirtualMirror.apply(mode === 'video' ? "mirrorVideo" : "mirrorImg", "mirrorCanvas", effectObject);
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        setRadioValues(); // init values for radio buttons
+
+        document.querySelectorAll('input[type=radio], select').forEach(item => {
+            item.addEventListener('change', applyEffect);
+        });
+
+        document.querySelectorAll('input[type=range]').forEach(item => {
+            item.addEventListener('input', applyEffect);
+        });
+
+        // Listen for the color picker change
+        document.getElementById("colorPicker").addEventListener('input', applyEffect);
+    });
+</script>
+</body>
+</html>
